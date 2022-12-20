@@ -165,4 +165,28 @@
 // The ID of the order which is used for API purposes. This is different from the "order_number" property, which is used by the shop owner and customer
 
 // 33. landing_site
-// 
+// The URL of the page where the buyer landed when they entered the shop.
+
+// 34. line_items
+// The list of line items objects, each containing information about an item in the order. Each object have the following properties:
+// 1. fulfillable_quantity: The amount available to fulfill, calculated as follows:
+// quantity - max(refunded_quantity, fulfilled_quantity)
+// pending_fulfilled_quantity - open_fulfilled_quantity
+// 2. fulfillment_service: The service provider thats fulfilling the item.
+// 3. fulfillment_status: How far along an order is in terms line items fulfilled. It's valid values are:
+// a. null
+// b. fulfilled
+// c. partial
+// d. not_eligible
+// 4. grams: The weight of items in grams
+// 5. id: The id of line items.
+// 6. price: The price of the item before discounts have been applied in the shop currency
+// 7. price_set: The price of the line item in shop and presentment currencies
+// 8. product_id: The id of the product where the line item belongs to. Can be null if the original product associated with the order is deleted at the later date.
+// 9. quantity: The number of items that were purchased.
+// 10. requires_shipping: Whether an item requires shipping.
+// 11. sku: The item's SKU (shop keeping unit).
+// 12. title: The title of the product.
+// 13. variant_id: The ID of the product variant.
+// 14. variant_title: The title of the product variant.
+// 15. vendor: The name of item's supplier.
