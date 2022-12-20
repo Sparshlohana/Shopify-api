@@ -125,4 +125,44 @@
 
 // 25. discount_codes
 // It is a list of discount applied to the order. Each discount object includes the following properties
-// 1. amount: The amount that is deducted from the order total. When you create an order, This value is in percentage
+// 1. amount: The amount that is deducted from the order total. When you create an order, This value is in percentage or the monitory amount to deduct. After the order is created, this property returns the calculated amount.
+// 2. code: When the associated discount applicable is of type code, this property returns the discount code that was entered at the time of checkout. Otherwise, this property returns the title of the discount that was applied.
+// 3. type: It is the type of the discount. Its default value is "fixed_amount". Its valid values are:
+// a. fixed_amount: Applies amount as a unit of store's currency. For example: If amount is 30 and the store's currency is "USD", then the discount will be 30 USD. 30 USD will be deducted at the time of checkout as the discount.
+// b. percentage: applies the discount as a percentage of the total order.
+// c. shipping: Applies the free shipping discount that have shipping rate less then or equal to discount. For example: If amount is 30, then the discount will give the customer free shipping for any shipping rates then a less then or equal to $30.
+
+// 26. Email
+// The customer's email address.
+
+// 27. estimated_taxes
+// Whether taxes on the order are estimated. Many factors can be changed between the time a customer places an order and the time order is shipped, which could affect the calculation of taxes. This property returns false and when taxes on the order are finalized and are not being changed in the future.
+
+// 28. financial_status
+// The status of order associated with the order. Can only be set when the order was created. Its valid values are:
+// 1. pending: The payment is still pending. Payment might fail in this state. Check again to confirm whether the payments have been paid successfully.
+// 2. authorized: The payment have been authorized.
+// 3. partially_paid: The order has been partially paid.
+// 4. paid: The payment has been paid.
+// 5. partially_refunded: The payment has been partially refunded.
+// 6. refunded: The payment has been refunded.
+// 7. voided: The payment has been voided.
+
+// 29. fulfillment
+// The array of fulfillments associated with the order.
+
+// 30. fulfillment_status
+// The ordered statues in term of fulfilled line terms. Its valid values are:
+// 1. fulfilled: Every line item in an order is fulfilled.
+// 2. null: None of the line items in an order is fulfilled.
+// 3. partial: At least one line item in an order is fulfilled.
+// 4. restocked: Every line item in an order is restocked and the order is canceled.
+
+// 31. gateway
+// The payment gateway used.
+
+// 32. id
+// The ID of the order which is used for API purposes. This is different from the "order_number" property, which is used by the shop owner and customer
+
+// 33. landing_site
+// 
