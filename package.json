@@ -12,9 +12,12 @@
   "license": "ISC",
   "dependencies": {
     "@shopify/shopify-api": "^6.0.1",
+    "cookie-parser": "^1.4.6",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "mysql2": "^2.3.3",
-    "sequelize": "^6.27.0"
+    "node-sessionstorage": "^1.0.0",
+    "sequelize": "^6.27.0",
+    "store2": "^2.14.2"
   }
 }

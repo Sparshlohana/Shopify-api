@@ -2,11 +2,14 @@ const { shopifyApi, LATEST_API_VERSION, ApiVersion } = require('@shopify/shopify
 const { restResources } = require('@shopify/shopify-api/rest/admin/2022-10')
 require('@shopify/shopify-api/adapters/node');
 const dotenv = require('dotenv').config();
+const session = require('node-sessionstorage');
+const { json } = require('sequelize');
 
 const { SHOPIFY_API_KEY, SHOPIFY_API_SECRET, SCOPES } = process.env;
 const db = require('../database/index');
 
 const ShopifyAuthData = db.ShopifyAuthData;
+
 
 class ShopifyController {
 
@@ -45,9 +48,11 @@ class ShopifyController {
             rawResponse: res,
         });
         this.session = callback.session;
-        console.log(this.session);
+        // console.log(this.session);
         const callbackSession = callback.session;
 
+
+        res.cookie("auth", JSON.stringify(callbackSession));
 
         const { id, shop, state, isOnline, accessToken, scope } = callbackSession;
         try {
@@ -67,57 +72,16 @@ class ShopifyController {
 
                 console.log("Data created");
             }
-            try {
-
-                // Get all products
-
-                // const data = await this.shopify.rest.Product.all({
-                //     session: callbackSession,
-                // });
-                // console.log(data);
-
-
-                // Post product
-                // const product = new shopify.rest.Product({ session: callbackSession });
-                // product.title = "Burton Custom Freestyle 151";
-                // product.body_html = "<strong>Good snowboard!</strong>";
-                // product.vendor = "Burton";
-                // product.product_type = "Snowboard";
-                // product.tags = [
-                //     "Barnes & Noble",
-                //     "Big Air",
-                //     "John's Fav"
-                // ];
-                // await product.save({
-                //     update: true,
-                // });
-                // console.log("Product created");
-
-                // Delete The Product
-                // await shopify.rest.Product.delete({
-                //     session: callbackSession,
-                //     id: 1986859106369,
-                // });
-                // console.log("Product Deleted");
-
-                // Count The Product
-
-                // const count = await this.shopify.rest.Product.count({
-                //     session: callbackSession,
-                // });
-                // console.log(count);
-            } catch (e) {
-                console.log(e);
-            }
-
 
         } catch (error) {
             console.log(`The error is ${error}`);
         }
-        res.redirect('/products');
+        res.redirect('/products?shop=securecod3.myshopify.com');
     };
 }
 
 const shopify = new ShopifyController(SHOPIFY_API_KEY, SHOPIFY_API_SECRET, SCOPES, ApiVersion.October22, restResources);
 
 module.exports = shopify;
+
+// http://localhost:5000/auth?shop=securecod3.myshopify.com

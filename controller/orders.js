@@ -60,6 +60,13 @@ const createOrder = async (req, res) => {
 }
 
 const getAllOrders = async (req, res) => {
+    const sessionId = await shopify.shopify.session.getCurrentId({
+        isOnline: true,
+        rawRequest: req,
+        rawResponse: res,
+    });
+    console.log(sessionId);
+    // const session = await getSessionFromStorage(sessionId);
     const shop = req.query.shop;
     try {
 
@@ -77,7 +84,7 @@ const getAllOrders = async (req, res) => {
                 status: "any",
             });
 
-            console.log(getOrders);
+            // console.log(getOrders);
             res.send(getOrders)
         }
     } catch (error) {
@@ -129,20 +136,31 @@ const updateOrder = async (req, res) => {
 
             const getOrderFromPm = body.order;
             // console.log(getProductFromPm);
+            try {
+                const order = new shopify.shopify.rest.Order({ session: session });
+                order.id = id;
+                order.metafields = [
+                    {
+                        "title": "Big Brown Deep",
+                        "price": 70.0,
+                        "grams": "1300",
+                        "quantity": 2,
+                        "tax_lines": [
+                            {
+                                "price": 13.5,
+                                "rate": 0.06,
+                                "title": "State tax"
+                            }
+                        ]
+                    }
+                ];
+                await order.save({
+                    update: true,
+                });
+            } catch (error) {
+                console.log(`the error is ${error}`);
 
-            const order = new shopify.shopify.rest.Order({ session: session });
-            order.id = id;
-            order.metafields = [
-                {
-                    "key": "new",
-                    "value": "newvalue",
-                    "type": "single_line_text_field",
-                    "namespace": "global"
-                }
-            ];
-            await order.save({
-                update: true,
-            });
+            }
 
             res.json({
                 message: "Data updated"
@@ -150,6 +168,9 @@ const updateOrder = async (req, res) => {
         }
     } catch (error) {
         console.log(error);
+        res.send({
+            message: "Error updating data"
+        })
     }
 
 
