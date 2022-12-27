@@ -120,3 +120,11 @@
 // 2. handle: The handle of the shipping rate which was selected and applied. Required for regular shipping lines.
 // 3. title: The title of the shipping method. Required for custom line shipping lines. (maximum: 255 characters).
 // 4. price: The price of the shipping method. Required for custom line shipping lines.
+
+// 15. source_name: The source at the checkout. To use this felid for sales attribution, you need to register tha channel your app is managing. You can register the channels that your app is managing.
+
+// 16. tags
+// It is a comma separated list of additional shorts description, commonly used for filtering and searching. Each individual tags is limited to 40 characters in length. Eg. 'tags: "tag1", "tag2", "tag3"'.
+
+// 17. tax_exempt
+// Whether the tax are exempt for the draft order. If it is set to false, then shopify refers to the taxable field for each "line_item". If a customer is applied to the draft order, then shopify uses the customer's tax_exempt field instead.
