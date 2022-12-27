@@ -114,3 +114,9 @@
 // d. due_at: The date and time when the payment is due. Calculated based on issued_at and due_in_days or a customized fixed date if the type is fixed.
 // f. completed_at: The date and time when the purchase was completed. Returns null initially and updates when the payment was captured.
 // g. expected_payment_method: The name of payment method gateway.
+
+// 14. shipping_line: It is the shipping method used. Each shipping line has the following properties:
+// 1. custom: Whether this is a regular shipping line or a custom shipping line.
+// 2. handle: The handle of the shipping rate which was selected and applied. Required for regular shipping lines.
+// 3. title: The title of the shipping method. Required for custom line shipping lines. (maximum: 255 characters).
+// 4. price: The price of the shipping method. Required for custom line shipping lines.
