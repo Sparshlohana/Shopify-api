@@ -128,3 +128,69 @@
 
 // 17. tax_exempt
 // Whether the tax are exempt for the draft order. If it is set to false, then shopify refers to the taxable field for each "line_item". If a customer is applied to the draft order, then shopify uses the customer's tax_exempt field instead.
+
+// 18. tax_exemption
+// Whether the customer is exempt from paying taxes on their order. Canadian Taxes Only. It's valid values are:
+// 1. EXEMPT_ALL: This customer is exempt from all canadian taxes.
+// 2. CA_STATUS_CARD_EXEMPTION: This customer is exempt from specific taxes for holding STATUS_CARD_EXEMPTION in Canada.
+// 3. CA_DIPLOMAT_EXEMPTION: This customer is exempt from specific taxes for holding DIPLOMAT_EXEMPTION in Canada.
+// 4. CA_BC_RESELLER_EXEMPTION: This customer is exempt from specific taxes for holding a valid RESELLER_EXEMPTION card in British Columbia
+// 5. CA_MB_RESELLER_EXEMPTION: This customer is exempt from specific taxes for holding a valid RESELLER_EXEMPTION in Manitoba.
+// 6. CA_SK_RESELLER_EXEMPTION: This customer is exempt from specific taxes for holding a valid RESELLER_EXEMPTION in Saskatchewan.
+// 7. CA_BC_COMMERCIAL_FISHERY_EXEMPTION: This customer is exempt from specific taxes for holding a valid COMMERCIAL_FISHERY_EXEMPTION in British Columbia.
+// 8. CA_MB_COMMERCIAL_FISHERY_EXEMPTION: This customer is exempt from specific taxes for holding a valid COMMERCIAL_FISHERY_EXEMPTION in Manitoba.
+// 9. CA_NS_COMMERCIAL_FISHERY_EXEMPTION: This customer is exempt from specific taxes for holding a valid COMMERCIAL_FISHERY_EXEMPTION in Nova Scotia.
+// 10. CA_PE_COMMERCIAL_FISHERY_EXEMPTION: This customer is exempt from specific taxes for holding a valid COMMERCIAL_FISHERY_EXEMPTION in Prince Edward Island.
+// 11. CA_SK_COMMERCIAL_FISHERY_EXEMPTION: This customer is exempt from specific taxes for holding a valid COMMERCIAL_FISHERY_EXEMPTION in Saskatchewan.
+// 12. CA_BC_PRODUCTION_AND_MACHINERY_EXEMPTION: This customer is exempt from specific taxes for holding a valid PRODUCTION_AND_MACHINERY_EXEMPTION in British Columbia.
+// 13. CA_SK_PRODUCTION_AND_MACHINERY_EXEMPTION: This customer is exempt from specific taxes for holding a valid PRODUCTION_AND_MACHINERY_EXEMPTION in Saskatchewan.
+// 14. CA_BC_SUB_CONTRACTOR_EXEMPTION: This customer is exempt from specific taxes for holding a valid SUB_CONTRACTOR_EXEMPTION in British Columbia.
+// 15. CA_SK_SUB_CONTRACTOR_EXEMPTION: This customer is exempt from specific taxes for holding a valid SUB_CONTRACTOR_EXEMPTION in Saskatchewan.
+// 16. CA_BC_CONTRACTOR_EXEMPTION: This customer is exempt from specific taxes for holding a valid CONTRACTOR_EXEMPTION in British Columbia.
+// 17. CA_SK_CONTRACTOR_EXEMPTION: This customer is exempt from specific taxes for holding a valid CONTRACTOR_EXEMPTION in Saskatchewan.
+// 18. CA_ON_PURCHASE_EXEMPTION: This customer is exempt from specific taxes for holding a valid PURCHASE_EXEMPTION in Ontario.
+// 19. CA_MB_FARMER_EXEMPTION: This customer is exempt from specific taxes for holding a valid FARMER_EXEMPTION in Manitoba.
+// 20. CA_NS_FARMER_EXEMPTION: This customer is exempt from specific taxes for holding a valid FARMER_EXEMPTION in Nova Scotia.
+// 21. CA_SK_FARMER_EXEMPTION: This customer is exempt from specific taxes for holding a valid FARMER_EXEMPTION in Saskatchewan.
+
+// 19. tax_lines
+// An array of line resources, each of which details a tax applicable to the order. Each "tax_line" resource has the following properties:
+// 1. price: The price of tax to be charged.
+// 2. rate: The rate of the tax to be charged.
+// 3. title: The name of tax.
+
+// 20. applied_discount
+// The discount applied to the line item the draft order resource. Each draft order resource can have one "applied_discount" resource and each draft order line item can have its own "applied_discount". The "applied_discount" resource has the following properties:
+// 1. title: Title of the discount.
+// 2. description: Reason of the discount.
+// 3. value: The value of the discount. If the discount is "fixed_amount", then it corresponds to a fixed dollar amount. If the type is percentage, then it corresponds to a percentage.
+// 4. value_type: The type of the discount. Valid values are "percentage" and "fixed_amount".
+// 5. amount: The applied amount of the discount, based on the setting of "value_type".
+
+// 21. taxes_included
+// Whether taxes are included in the order subtotal. Valid values are "true" or "false".
+
+// 22. total_tax
+// The sum of all the total taxes applied to the order.
+
+// 23. subtotal_price
+// The price of the order before taxes and shipping.
+
+// 24. total_price
+// The sum of all the total prices applied to the order, including taxes and discounts.
+
+// 25. completed_at
+// The date and time when the order was created and the draft order was completed.
+
+// 26. created_at
+// The date and time when the order was created and the draft order was completed.
+
+// 27. updated_at
+// The date and time when the order was last modified.
+
+// 28. status
+// The status of a draft order as it transitions into an order. When a draft order is created it is to set "open" status. The invoice can be sent to the customer, and "status" changes to "invoice_sent". The draft order can then be paid, set to pending, or paid by credit card. In each case, draft order is set to "completed" and an order is created.
+// After the draft order is set to "completed" the only modifications that can be made are adding tags or metafields. It's valid values are:
+// 1. open: Draft order is open.
+// 2. invoice_sent: invoice has been sent for the draft order.
+// 3. completed: Draft order has been completed and turned into order.
