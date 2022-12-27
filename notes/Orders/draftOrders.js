@@ -89,4 +89,28 @@
 // 10. fulfillment_services: The service provider responsible for the fulfillment. Valid values are either "manual" or name of the provider, Ex: Amazon, shipwire. Defaults to "manual" for custom line items.
 // 11. properties: An array of custom information for an item that has been added in the draft order, used to provide "product customizable options". Copied to create when draft order is completed.
 // 12. applied_discount: The discount applied to the line item.
-// 13. tax_lines: "Read-only-fields"-The calculated rate and amount of the taxes in the line item.
+// 13. tax_lines: "Read-only-fields"-The calculated rate and amount of the taxes in the line item. It has the following properties:
+// a. price: The price of the tax to be charged.
+// b. rate: The rate of tax to be applied.
+// c. title: The name of the tax
+// 14. title: The title of the product or product variant. Applicable only to custom line items. (required field)
+// 15. price: The price of the item before discount applied. Applicable only to custom line items. (required field)
+// 16. grams: The weight of the item in grams. Applicable only to custom line items. If not specified, defaults to 0.
+// 17. required_shipping: Whether the fulfillment requires shipping. Applicable only to custom line items. Valid values are: "true" or "false".
+// 18. sku: A unique identifier for the item to in the fulfillment. Applicable only to custom line items.
+// 19. taxable: Whether the item is taxable. Applicable only to custom line items.
+
+// 13. payment_terms
+// The terms and conditions under which the payment has to be made. It's properties are:
+// 1. amount: The amount that is owned according to the payment terms.
+// 2. currency: The presentment currency for the payment.
+// 3. payment_terms_name: The name of the selected payment terms template for the draft order.
+// 4. payment_term_type: The type of the payment term template for the draft order.
+// 5. due_in_days: The number of days between the invoice date and due date that is defined in the selected payment terms template.
+// 6. payment_schedules: An array of schedules associated to the payment terms. It has the following properties:
+// a. amount: The amount that is owned according to the payment terms.
+// b. currency: The presentment currency for the payment.
+// c. issued_at: The date and time when the payment terms were initiated.
+// d. due_at: The date and time when the payment is due. Calculated based on issued_at and due_in_days or a customized fixed date if the type is fixed.
+// f. completed_at: The date and time when the purchase was completed. Returns null initially and updates when the payment was captured.
+// g. expected_payment_method: The name of payment method gateway.
