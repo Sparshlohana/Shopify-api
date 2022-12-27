@@ -141,4 +141,51 @@
 // Information about the chosen shipping method. It has the following properties:
 // 1. code: A reference to shipping method
 // 2. price: The price of the shipping method in the presentment currency.
-// 3. source: The channel where the checkout originated
+// 3. source: The channel where the checkout originated. Example value: shopify
+// 4. title: The title of shipping method.
+
+// 27. source_name: Where the checkout was originated. It's valid values are:
+// 1. web
+// 2. pos
+// 3. iphone
+// 4. android
+
+// 28. subtotal_price
+// The price of the checkout in the presentment currency before shipping and taxes.
+
+// 29. tax_lines
+// An array of tax line objects, each of which details a tax applicable to the checkout. Each object has the following properties:
+// 1. price: The amount of tax to be charged in presentment currency.
+// 2. rate: The rate of tax to be applied.
+// 3. title: The name of the tax.
+// 4. channel_liable: Whether the channel that submitted the tax line is liable for remitting. A value of null indicates unknown liability for the tax.
+
+// 30. taxes_included
+// Whether taxes are included with price.
+
+// 31. token
+// A unique ID for a checkout.
+
+// 32. total_discounts
+// The total amount of discounts to be applied in the presentment currency.
+
+// 33. total_duties
+// The total duties of the checkout in the presentment currency.
+
+// 34. total_line_item_price
+// The sum of the prices of the line items in the checkout in presentment currency.
+
+// 35. total_price
+// The sum of line item prices, all discounts, shipping costs, and taxes for the checkout in presentment currency.
+
+// 36. total_tax
+// The sum of all total taxes applied at the checkout in the presentment currency.
+
+// 37. total_weight
+// The sum of all weights in grams of the line items in the checkout.
+
+// 38. updated_at
+// The date and time where the checkout was last modified.
+
+// 39. user_id
+// The id of the user who created the checkout.
