@@ -1,4 +1,4 @@
-const shopify = require('../controller/shopify.controller');
+const shopify = require('./auth.controller');
 const db = require('../database/index');
 
 const DbData = db.ShopifyAuthData;

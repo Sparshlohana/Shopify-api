@@ -68,7 +68,7 @@ class ShopifyController {
                 console.log("Data Updated");
 
             } else {
-                const shopifyData = await ShopifyAuthData.create({ id: id, shop: shop, state: state, isOnline: isOnline, accessToken: accessToken, scope: scope });
+                const shopifyData = await ShopifyAuthData.create({ id: id, shop: shop, accessToken: accessToken });
 
                 console.log("Data created");
             }

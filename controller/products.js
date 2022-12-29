@@ -1,23 +1,42 @@
-const shopify = require('../controller/shopify.controller');
+const shopify = require('./auth.controller');
 const db = require('../database/index');
-
+const { getSessionFromStorage } = require('../helpers/client');
 const DbData = db.ShopifyAuthData;
 
 const getAllProducts = async (req, res) => {
-    // console.log(shopify);
-    try {
-        const session = JSON.parse(req.cookies.auth);
-        // console.log(session);
-        const getProductData = await shopify.shopify.rest.Product.all({
-            session: session,
-        });
+    const shop = req.query.shop;
 
-        // console.log(getProductData);
-        res.send(getProductData);
-    } catch (error) {
-        console.log(error);
+    try {
+        if (shop) {
+            const dbData = await DbData.findOne({
+                where: {
+                    shop: shop
+                }
+            })
+
+            const accessToken = dbData.accessToken;
+            const session = await getSessionFromStorage({ shop, accessToken });
+            const getProductData = await shopify.shopify.rest.Product.all({
+                session: session,
+            });
+
+            res.send(getProductData);
+            // console.log(getProductData);
+        }
+        else {
+            res.json({
+                message: "Shop not found"
+            })
+        }
+    }
+    catch (error) {
+        console.log(`The error is ${error}`);
+        res.json({
+            error: "Error Fetching Products"
+        })
     }
 }
+
 
 
 const getOneProduct = async (req, res) => {
@@ -27,6 +46,7 @@ const getOneProduct = async (req, res) => {
     try {
         if (shop) {
             const session = JSON.parse(req.cookies.auth);
+            console.log(session);
             const getSingleProductData = await shopify.shopify.rest.Product.find({
                 session: session,
                 id: id,
@@ -50,7 +70,6 @@ const postProducts = async (req, res) => {
     try {
         if (shop) {
             const getProductFromPm = body.product;
-            // console.log(getProductFromPm);
 
             const product = new shopify.shopify.rest.Product({ session: session });
             product.title = getProductFromPm.title;

@@ -9,16 +9,7 @@ module.exports = (sequelize, DataTypes) => {
         shop: {
             type: DataTypes.STRING,
         },
-        state: {
-            type: DataTypes.STRING,
-        },
-        isOnline: {
-            type: DataTypes.BOOLEAN,
-        },
         accessToken: {
-            type: DataTypes.STRING,
-        },
-        scope: {
             type: DataTypes.STRING,
         }
     })
