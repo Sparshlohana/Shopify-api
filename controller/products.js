@@ -76,8 +76,16 @@ const postProducts = async (req, res) => {
     console.log(shop);
     try {
         if (shop) {
-            const getProductFromPm = body.product;
 
+            const dbData = await DbData.findOne({
+                where: {
+                    shop: shop
+                }
+            })
+            const accessToken = dbData.accessToken;
+            const session = await getSessionFromStorage({ shop, accessToken });
+
+            const getProductFromPm = body.product;
             const product = new shopify.shopify.rest.Product({ session: session });
             product.title = getProductFromPm.title;
             product.body_html = getProductFromPm.body_html;
