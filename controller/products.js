@@ -45,8 +45,13 @@ const getOneProduct = async (req, res) => {
 
     try {
         if (shop) {
-            const session = JSON.parse(req.cookies.auth);
-            console.log(session);
+            const dbData = await DbData.findOne({
+                where: {
+                    shop: shop
+                }
+            })
+            const accessToken = dbData.accessToken;
+            const session = await getSessionFromStorage({ shop, accessToken });
             const getSingleProductData = await shopify.shopify.rest.Product.find({
                 session: session,
                 id: id,
@@ -54,10 +59,12 @@ const getOneProduct = async (req, res) => {
             console.log(getSingleProductData);
             res.send(getSingleProductData);
         }
+
     } catch (error) {
         console.log(`The error is ${error}`);
     }
 }
+
 
 const postProducts = async (req, res) => {
     const shop = req.query.shop;
