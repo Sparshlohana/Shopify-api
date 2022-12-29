@@ -59,6 +59,12 @@ const getOneProduct = async (req, res) => {
             console.log(getSingleProductData);
             res.send(getSingleProductData);
         }
+        else {
+            console.log(`Shop not found`);
+            res.json({
+                error: "Shop not found"
+            })
+        }
 
     } catch (error) {
         console.log(`The error is ${error}`);
@@ -114,24 +120,34 @@ const postProducts = async (req, res) => {
 const deleteProduct = async (req, res) => {
     const shop = req.query.shop;
     const id = req.params.id;
+    try {
+        if (shop) {
+            const dbData = await DbData.findOne({
+                where: {
+                    shop: shop
+                }
+            });
+            const accessToken = dbData.accessToken;
+            const session = await getSessionFromStorage({ shop, accessToken });
 
-    if (shop) {
-        const dbData = await DbData.findOne({
-            where: {
-                shop: shop
-            }
-        });
-
-        const session = dbData.dataValues;
-
-
-        const getSingleProductData = await shopify.shopify.rest.Product.delete({
-            session: session,
-            id: id,
-        });
-        console.log(getSingleProductData);
-        res.send(getSingleProductData);
+            const deleteProduct = await shopify.shopify.rest.Product.delete({
+                session: session,
+                id: id,
+            });
+            console.log("Product Successfully deleted");
+            res.json({
+                message: "Product Successfully deleted"
+            });
+        }
+        else {
+            res.json({
+                message: "Shop Not Found"
+            })
+        }
+    } catch (error) {
+        console.log(`The error is ${error}`);
     }
+
 }
 
 const updateProduct = async (req, res) => {
@@ -139,32 +155,41 @@ const updateProduct = async (req, res) => {
     const id = req.params.id;
     const body = req.body;
 
-    const getProductFromPm = body.product;
-    console.log(getProductFromPm);
+    try {
+        if (shop) {
+            const dbData = await DbData.findOne({
+                where: {
+                    shop: shop
+                }
+            });
 
-    if (shop) {
-        const dbData = await DbData.findOne({
-            where: {
-                shop: shop
-            }
-        });
+            const accessToken = dbData.accessToken;
+            const session = await getSessionFromStorage({ shop, accessToken });
 
-        const session = dbData.dataValues;
+            const getProductFromPm = body.product;
 
-        const getProductFromPm = body.product;
-        // console.log(getProductFromPm);
-
-        const product = await new shopify.shopify.rest.Product({ session: session });
-        product.id = id;
-        product.title = getProductFromPm.title;
-        await product.save({
-            update: true,
-        });
-        console.log("Data Updated");
-        res.json({
-            message: "Data Updated"
-        });
+            const product = await new shopify.shopify.rest.Product({ session: session });
+            product.id = id;
+            product.title = getProductFromPm.title;
+            product.body_html = getProductFromPm.body_html;
+            await product.save({
+                update: true,
+            });
+            console.log("Data Updated");
+            res.json({
+                message: "Data Updated"
+            });
+        }
+        else {
+            res.json({
+                message: "Shop not found"
+            })
+        }
+    } catch (error) {
+        console.log(`The error is ${error}`);
     }
+
+
 }
 
 module.exports = {
