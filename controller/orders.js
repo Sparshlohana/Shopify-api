@@ -1,7 +1,8 @@
 const shopify = require('./auth.controller');
 const db = require('../database/index');
-
+const { getSessionFromStorage } = require('../helpers/client');
 const DbData = db.ShopifyAuthData;
+
 
 const createOrder = async (req, res) => {
     const shop = req.query.shop;
@@ -15,44 +16,27 @@ const createOrder = async (req, res) => {
                 }
             })
 
-            console.log(dbData);
-
-            const session = dbData.dataValues;
+            const accessToken = dbData.accessToken;
+            const session = await getSessionFromStorage({ shop, accessToken });
             const getOrdersFromPm = body.order;
 
             const order = new shopify.shopify.rest.Order({ session: session });
-            order.line_items = [
-                {
-                    "title": "Big Brown Bear Boots",
-                    "price": 74.99,
-                    "grams": "1300",
-                    "quantity": 3,
-                    "tax_lines": [
-                        {
-                            "price": 13.5,
-                            "rate": 0.06,
-                            "title": "State tax"
-                        }
-                    ]
-                }
-            ];
-            order.transactions = [
-                {
-                    "kind": "sale",
-                    "status": "success",
-                    "amount": 238.47
-                }
-            ];
-            order.total_tax = 13.5;
-            order.currency = "EUR";
+            order.line_items = getOrdersFromPm.line_items;
+            order.tax_lines = getOrdersFromPm.tax_lines;
+            order.total_tax = getOrdersFromPm.total_tax;
+            order.currency = getOrdersFromPm.currency;
             await order.save({
                 update: true,
             });
-
             res.json({
                 message: "Order created successfully",
             })
             console.log("Order created successfully");
+        }
+        else {
+            res.json({
+                message: "Shop not found"
+            })
         }
     } catch (err) {
         console.log(`The error is ${err}`);
@@ -77,7 +61,8 @@ const getAllOrders = async (req, res) => {
                 }
             });
 
-            const session = dbData.dataValues;
+            const accessToken = dbData.accessToken;
+            const session = await getSessionFromStorage({ shop, accessToken });
 
             const getOrders = await shopify.shopify.rest.Order.all({
                 session: session,
@@ -86,6 +71,11 @@ const getAllOrders = async (req, res) => {
 
             // console.log(getOrders);
             res.send(getOrders)
+        }
+        else {
+            res.json({
+                message: "Shop not found"
+            })
         }
     } catch (error) {
         console.log(error);
@@ -97,25 +87,34 @@ const getOneOrder = async (req, res) => {
     const shop = req.query.shop;
     const id = req.params.id;
 
-    if (shop) {
-        const dbData = await DbData.findOne({
-            where: {
-                shop: shop
-            }
-        });
+    try {
+        if (shop) {
+            const dbData = await DbData.findOne({
+                where: {
+                    shop: shop
+                }
+            });
 
-        const session = dbData.dataValues;
+            const accessToken = dbData.accessToken;
+            const session = await getSessionFromStorage({ shop, accessToken });
 
 
-        const getSingleProductData = await shopify.shopify.rest.Order.find({
-            session: session,
-            id: 4733515956289,
-            fields: "id,line_items,name,total_price",
-        });
-        console.log(getSingleProductData);
-        res.send(getSingleProductData);
+            const getSingleProductData = await shopify.shopify.rest.Order.find({
+                session: session,
+                id: id,
+                fields: "id,line_items,name,total_price",
+            });
+            console.log(getSingleProductData);
+            res.send(getSingleProductData);
+        }
+        else {
+            res.json({
+                message: "Shop not found"
+            })
+        }
+    } catch (error) {
+        console.log(`The error is ${error}`);
     }
-
 }
 
 const updateOrder = async (req, res) => {
@@ -133,37 +132,31 @@ const updateOrder = async (req, res) => {
             });
 
             const session = dbData.dataValues;
-
             const getOrderFromPm = body.order;
-            // console.log(getProductFromPm);
+
             try {
                 const order = new shopify.shopify.rest.Order({ session: session });
                 order.id = id;
-                order.metafields = [
-                    {
-                        "title": "Big Brown Deep",
-                        "price": 70.0,
-                        "grams": "1300",
-                        "quantity": 2,
-                        "tax_lines": [
-                            {
-                                "price": 13.5,
-                                "rate": 0.06,
-                                "title": "State tax"
-                            }
-                        ]
-                    }
-                ];
-                await order.save({
+                order.line_items = getOrderFromPm.line_items.title;
+
+                const orderUpdate = await order.save({
                     update: true,
                 });
+
+                res.json({
+                    message: "Data updated"
+                })
             } catch (error) {
                 console.log(`the error is ${error}`);
-
+                res.json({
+                    error: error.message
+                })
             }
 
+        }
+        else {
             res.json({
-                message: "Data updated"
+                message: "Shop not found"
             })
         }
     } catch (error) {
@@ -187,25 +180,29 @@ const deleteOrder = async (req, res) => {
                 }
             });
 
-            const session = dbData.dataValues;
-
-
+            const accessToken = dbData.accessToken;
+            const session = await getSessionFromStorage({ shop, accessToken });
 
             const deleteData = await shopify.shopify.rest.Order.delete({
                 session: session,
-                id: 4733503176769,
+                id: id,
             });
 
             res.json({
-                message: 'Product deleted successfully',
+                message: 'Order deleted successfully',
             })
-            console.log("Product deleted successfully");
+            console.log("Order deleted successfully");
+        }
+        else {
+            res.json({
+                message: "Shop not found"
+            })
         }
     } catch (error) {
         res.json({
-            error: "Product not found"
+            error: "Order not found"
         })
-        console.log("Product not found");
+        console.log(`The error is ${error}`);
 
     }
 

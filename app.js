@@ -9,7 +9,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use('/', authRoute);
 app.use('/products', productRoute);
-app.use('/', orderRoute);
+app.use('/orders', orderRoute);
 
 app.listen(PORT, () => {
     console.log(`The server is running on port ${PORT}`);
