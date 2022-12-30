@@ -137,7 +137,7 @@ const updateOrder = async (req, res) => {
             try {
                 const order = new shopify.shopify.rest.Order({ session: session });
                 order.id = id;
-                order.line_items = getOrderFromPm.line_items.title;
+                order.line_items = getOrderFromPm.line_items;
 
                 const orderUpdate = await order.save({
                     update: true,

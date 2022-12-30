@@ -7,6 +7,7 @@ const dbPassword = "Waheguruji@13";
 const sequelize = new Sequelize(dbName, dbUserName, dbPassword, {
     dialect: 'mysql',
     host: 'localhost',
+    logging: false,
 });
 
 sequelize.sync({ force: false });
