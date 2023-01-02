@@ -69,7 +69,7 @@ const getAllOrders = async (req, res) => {
                 status: "any",
             });
 
-            // console.log(getOrders);
+            console.log(getOrders);
             res.send(getOrders)
         }
         else {
@@ -121,7 +121,6 @@ const updateOrder = async (req, res) => {
     const shop = req.query.shop;
     const id = req.params.id;
     const body = req.body;
-    console.log(shop);
 
     try {
         if (shop) {
@@ -133,19 +132,27 @@ const updateOrder = async (req, res) => {
 
             const session = dbData.dataValues;
             const getOrderFromPm = body.order;
+            const line_items = getOrderFromPm.line_items;
+            // console.log(line_items[0]);
 
             try {
                 const order = new shopify.shopify.rest.Order({ session: session });
-                order.id = id;
-                order.line_items = getOrderFromPm.line_items;
 
-                const orderUpdate = await order.save({
+                order.id = id;
+                order.metafields = [
+                    {
+                        "key": "new",
+                        "value": "newvalue",
+                        "type": "single_line_text_field",
+                        "namespace": "global"
+                    }
+                ]
+                order.line_items = line_items;
+                await order.save({
                     update: true,
                 });
-
-                res.json({
-                    message: "Data updated"
-                })
+                // console.log(order);
+                res.json(order)
             } catch (error) {
                 console.log(`the error is ${error}`);
                 res.json({
@@ -165,8 +172,6 @@ const updateOrder = async (req, res) => {
             message: "Error updating data"
         })
     }
-
-
 }
 
 const deleteOrder = async (req, res) => {
@@ -203,7 +208,6 @@ const deleteOrder = async (req, res) => {
             error: "Order not found"
         })
         console.log(`The error is ${error}`);
-
     }
 
 }
