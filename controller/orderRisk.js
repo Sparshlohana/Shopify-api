@@ -1,6 +1,7 @@
 const shopify = require('./auth.controller');
 const db = require('../database/index');
 const { getSessionFromStorage } = require('../helpers/client');
+const { ConnectionRefusedError } = require('sequelize');
 const DbData = db.ShopifyAuthData;
 
 const createOrderRisk = async (req, res) => {
@@ -60,11 +61,18 @@ const getAllProductRisk = async (req, res) => {
             const accessToken = dbData.accessToken;
             const session = await getSessionFromStorage({ shop, accessToken });
             console.log(session);
-            const getProductData = await shopify.shopify.rest.OrderRisk.all({
-                order_id: id,
-                session: session,
-            });
-            res.send(getProductData);
+            try {
+                const getProductData = await shopify.shopify.rest.OrderRisk.all({
+                    session: session,
+                    order_id: id
+                });
+                console.log(shopify.shopify.rest);
+
+                res.send(getProductData);
+            } catch (e) {
+                // throw e
+                console.log(e);
+            }
         }
         else {
             res.json({
