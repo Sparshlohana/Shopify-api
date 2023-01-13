@@ -62,13 +62,13 @@ const getAllProductRisk = async (req, res) => {
             const session = await getSessionFromStorage({ shop, accessToken });
             console.log(session);
             try {
-                const getProductData = await shopify.shopify.rest.OrderRisk.all({
+                const getOrderRiskData = await shopify.shopify.rest.OrderRisk.all({
                     session: session,
                     order_id: id
                 });
                 console.log(shopify.shopify.rest);
 
-                res.send(getProductData);
+                res.send(getOrderRiskData);
             } catch (e) {
                 // throw e
                 console.log(e);
@@ -92,7 +92,42 @@ const updateOrderRisk = async (req, res) => {
 }
 
 const deleteOrderRisk = async (req, res) => {
+    try {
+        const shop = req.query.shop;
+        const id = req.params.id;
+        if (shop) {
+            const dbData = await DbData.findOne({
+                where: {
+                    shop: shop
+                }
+            })
 
+            const accessToken = dbData.accessToken;
+            const session = await getSessionFromStorage({ shop, accessToken });
+            console.log(session);
+            try {
+                await shopify.rest.OrderRisk.delete({
+                    session: session,
+                    order_id: 450789469,
+                    id: 284138680,
+                });
+                console.log("Order Risk deleted");
+                res.json({
+                    message: "Order Risk deleted"
+                });
+            } catch (e) {
+                // throw e
+                console.log(e);
+            }
+        }
+        else {
+            res.json({
+                message: "Shop not found"
+            })
+        }
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 module.exports = {
