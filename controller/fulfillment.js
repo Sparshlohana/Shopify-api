@@ -17,6 +17,7 @@ const createFulfillment = async (req, res) => {
         const accessToken = dbData.accessToken;
         const session = await getSessionFromStorage({ shop, accessToken });
         const fulfillmentData = body.fulfillment;
+        console.log(fulfillmentData);
         const fulfillment = new shopify.shopify.rest.Fulfillment({ session: session });
         fulfillment.message = fulfillmentData.message;
         fulfillment.notify_customer = fulfillmentData.notify_customer;

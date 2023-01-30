@@ -25,6 +25,7 @@ const createOrder = async (req, res) => {
             order.tax_lines = getOrdersFromPm.tax_lines;
             order.total_tax = getOrdersFromPm.total_tax;
             order.currency = getOrdersFromPm.currency;
+            order.customer = getOrdersFromPm.customer;
             await order.save({
                 update: true,
             });
