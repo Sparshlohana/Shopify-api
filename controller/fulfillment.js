@@ -22,11 +22,12 @@ const createFulfillment = async (req, res) => {
         fulfillment.message = fulfillmentData.message;
         fulfillment.notify_customer = fulfillmentData.notify_customer;
         fulfillment.tracking_info = fulfillmentData.tracking_info;
-        fulfillment.line_items_by_fulfillment_order = [
-            {
-                "fulfillment_order_id": id
-            }
-        ];
+        fulfillment.line_items = fulfillmentData.line_items.map(item => ({
+            title: item.title,
+            price: item.price,
+            grams: item.grams,
+            quantity: item.quantity,
+        }))
         await fulfillment.save({
             update: true,
         });
