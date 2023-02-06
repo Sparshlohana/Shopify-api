@@ -70,7 +70,6 @@ const getAllProductRisk = async (req, res) => {
 
                 res.send(getOrderRiskData);
             } catch (e) {
-                // throw e
                 console.log(e);
             }
         }

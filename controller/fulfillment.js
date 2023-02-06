@@ -17,17 +17,19 @@ const createFulfillment = async (req, res) => {
         const accessToken = dbData.accessToken;
         const session = await getSessionFromStorage({ shop, accessToken });
         const fulfillmentData = body.fulfillment;
-        console.log(fulfillmentData);
         const fulfillment = new shopify.shopify.rest.Fulfillment({ session: session });
         fulfillment.message = fulfillmentData.message;
         fulfillment.notify_customer = fulfillmentData.notify_customer;
         fulfillment.tracking_info = fulfillmentData.tracking_info;
-        fulfillment.line_items = fulfillmentData.line_items.map(item => ({
-            title: item.title,
-            price: item.price,
-            grams: item.grams,
-            quantity: item.quantity,
-        }))
+        fulfillment.fulfillment_order_id = fulfillmentData.fulfillment_order_id;
+        // fulfillment.line_items_by_fulfillment_order = fulfillmentData.line_items_by_fulfillment_order.map(item => ({
+        //     title: item.title,
+        //     price: item.price,
+        //     grams: item.grams,
+        //     quantity: item.quantity,
+        // }))
+        fulfillment.line_items_by_fulfillment_order = fulfillmentData.line_items_by_fulfillment_order
+        // console.log(fulfillment);
         await fulfillment.save({
             update: true,
         });

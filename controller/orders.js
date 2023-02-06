@@ -21,11 +21,7 @@ const createOrder = async (req, res) => {
             const getOrdersFromPm = body.order;
 
             const order = new shopify.shopify.rest.Order({ session: session });
-            order.line_items = getOrdersFromPm.line_items;
-            order.tax_lines = getOrdersFromPm.tax_lines;
-            order.total_tax = getOrdersFromPm.total_tax;
-            order.currency = getOrdersFromPm.currency;
-            order.customer = getOrdersFromPm.customer;
+            order.line_items = getOrdersFromPm.line_items
             await order.save({
                 update: true,
             });
@@ -43,6 +39,46 @@ const createOrder = async (req, res) => {
         console.log(`The error is ${err}`);
     }
 }
+// const createOrder = async (req, res) => {
+//     const shop = req.query.shop;
+//     console.log(shop);
+//     const body = req.body;
+//     try {
+//         if (shop) {
+//             const dbData = await DbData.findOne({
+//                 where: {
+//                     shop: shop
+//                 }
+//             })
+
+//             const accessToken = dbData.accessToken;
+//             const session = await getSessionFromStorage({ shop, accessToken });
+//             const getOrdersFromPm = body.order;
+
+//             const order = new shopify.shopify.rest.Order({ session: session });
+//             order.line_items = getOrdersFromPm.line_items;
+//             order.tax_lines = getOrdersFromPm.tax_lines;
+//             order.total_tax = getOrdersFromPm.total_tax;
+//             order.currency = getOrdersFromPm.currency;
+//             order.customer = getOrdersFromPm.customer;
+//             order.financial_status = getOrdersFromPm.financial_status;
+//             await order.save({
+//                 update: true,
+//             });
+//             res.json({
+//                 message: "Order created successfully",
+//             })
+//             console.log("Order created successfully");
+//         }
+//         else {
+//             res.json({
+//                 message: "Shop not found"
+//             })
+//         }
+//     } catch (err) {
+//         console.log(`The error is ${err}`);
+//     }
+// }
 
 const getAllOrders = async (req, res) => {
     const sessionId = await shopify.shopify.session.getCurrentId({

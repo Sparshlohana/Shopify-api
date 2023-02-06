@@ -48,7 +48,9 @@ const postTransaction = async (req, res) => {
         transaction.currency = getData.currency;
         transaction.amount = getData.amount;
         transaction.kind = getData.kind;
-        transaction.parent_id = getData.parent_id;
+        transaction.test = getData.test;
+        console.log(transaction);
+        // transaction.parent_id = getData.parent_id;
         await transaction.save({
             update: true,
         });
